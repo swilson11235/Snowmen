@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<BLOCKWORLD>
+    <BLOCK>
+        <X>2</X>
+        <Y>3</Y>
+        <Z>0</Z>
+        <RED>1.0</RED>
+        <GREEN>0.0</GREEN>
+        <BLUE>0.0</BLUE>
+    </BLOCK>
+    <BLOCK>
+        <X>3</X>
+        <Y>0</Y>
+        <Z>4</Z>
+        <RED>0.0</RED>
+        <GREEN>0.0</GREEN>
+        <BLUE>1.0</BLUE>
+    </BLOCK>
+</BLOCKWORLD>

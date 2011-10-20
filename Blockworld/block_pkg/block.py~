@@ -1,0 +1,13 @@
+'''The block class '''
+__author__ = 'Stephen and Will'
+__version__ = '1.0'
+from OpenGL.GLUT import *
+from OpenGL.GLU import *
+from OpenGL.GL import *            
+import math
+
+class block():
+    def __init__(self,):
+        '''Initializes a block.'''
+        pass
+        
