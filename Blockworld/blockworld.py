@@ -3,91 +3,64 @@
 __author__ = 'Stephen and Will'
 __version__ = '1.0'
 
-from OpenGL.GLUT import *
-from OpenGL.GLU import *
-from OpenGL.GL import *
-import sys
-from camera_pkg import camera
 
-name = 'Snowmen'
-WINDOW_WIDTH = 500
-WINDOW_HEIGHT = 500
+from block_pkg import block
+from lxml import etree
 
-class Snowmen:
+class Blockworld:
     def __init__(self):
-        self.my_camera= camera()
-
+        self.blocknum=0
+        self.blockobjects=[]
+        self.blocks=[]
+        self.block=[]
+        self.myblocks=[]
+    def __getitem__(self):
+        return self.myblocks
     def main(self):
-        glutInit(sys.argv)
-        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH)
-        glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
-        glutCreateWindow(name)
+        self.xml_import()
+    def xml_import(self,fl_name='blockworld.xml'):
+        tree= etree.parse(fl_name)
+        self.blocknum=len(tree.xpath('//BLOCK'))
+        self.blockobjects=tree.xpath('//BLOCK')
+        for block in self.blockobjects:
+            for dat in block:
+                tagls=[]
+                tagls.append([item.tag for item in dat.iter()])
+                tagls.append([item.text for item in dat.iter()])
+                self.block.append([tagls[0][0],tagls[1][0]])
+            self.blocks.append(self.block)
+            self.block=[]
+        self.create_block()
+    def create_block(self):
+        postup=[]
+        colortup=[]
+        sizetup=[]
+        postmp=[]
+        colortmp=[]
+        sizetmp=[]
+        for i in range(self.blocknum):
+            for n in range (len(self.blocks[0])):
+                if self.blocks[i][n][0]=='X' or self.blocks[i][n][0]=='Y' or self.blocks[i][n][0]=='Z':
+                    postmp.append(float(self.blocks[i][n][1]))
+                if self.blocks[i][n][0]=='RED' or self.blocks[i][n][0]=='GREEN' or self.blocks[i][n][0]=='BLUE':
+                    colortmp.append(float(self.blocks[i][n][1]))
+                if self.blocks[i][n][0]=='BLOCKSIZE':
+                    sizetmp.append(float(self.blocks[i][n][1]))
+            postup.append(postmp)
+            colortup.append(colortmp)
+            sizetup.append(sizetmp)
+            postmp=[]
+            colortmp=[]
+            sizetmp=[]
 
-        light_specular = (.3, .3, .3, .1)
-        light_position = (.5, 1, -1, 1)
-        glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular)
-        glLightfv(GL_LIGHT0, GL_POSITION, light_position)
-
-        light_ambient = (1, 1, 1, 1)
-        light_position = (0, 0, 1, 0)
-        glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient)
-        glLightfv(GL_LIGHT1, GL_POSITION, light_position)
-
-        glEnable(GL_LIGHTING)
-        glEnable(GL_LIGHT0)
-        glEnable(GL_LIGHT1)
-
-        glMatrixMode(GL_PROJECTION)
-        gluPerspective(45,1,.15,100)
-        glMatrixMode(GL_MODELVIEW)
-        glEnable(GL_DEPTH_TEST)
-        glutKeyboardFunc(self.keyPressed)
-        glutDisplayFunc(self.display)
-        glutIdleFunc(self.display)
-        glutMainLoop()
-
-    def keyPressed(self,key,x,y):
-        print "Pressed key: ", key
-        if key == 'a':
-            self.my_camera.strafeleft()
-        if key == 'd':
-            self.my_camera.straferight()
-        if key == 'w':
-            self.my_camera.moveup()
-        if key == 's':
-            self.my_camera.movedown()
-        if key =='e':
-            self.my_camera.walkin()
-        if key == 'c':
-            self.my_camera.walkout()
-        if key=='r':
-            self.my_camera.rotate()
-
-
-    def display(self,x=-.5, y=-.5,z=0,number=3):
-        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-        glLoadIdentity()
-        self.my_camera.rendercamera()
-
-        size=0.3
-        for i in range(number):
-            self.draw_snowman(x,y,z,size)
-            x=.6
-            y=.1
-            z=0
-        glFlush()
-
-    def draw_snowman(self,x,y,z,size):
-        glMaterial(GL_FRONT, GL_AMBIENT, (.5, .5, .5));
-        glTranslate(x,y,z)
-        glutSolidSphere(size, 40, 40)
-        glTranslate(0,size/3*2,0)
-        glutSolidSphere(size/3*2, 40, 40)
-        glTranslate(0,size/3*2,0)
-        glutSolidSphere(size/2, 40, 40)
-
+        for i in range(self.blocknum):
+            myblock=block()
+            self.myblocks.append(myblock)
+            self.myblocks[i].changeposition(postup[i])
+            self.myblocks[i].changecolor(colortup[i])
+            self.myblocks[i].changesize(sizetup[i])
 
 if __name__ == '__main__': 
-    snowmen = Snowmen()
-    snowmen.main()
+    blockworld = Blockworld()
+    blockworld.main()
 

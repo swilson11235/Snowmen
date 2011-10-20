@@ -1,13 +1,45 @@
-'''The block class '''
+'''The block class.'''
 __author__ = 'Stephen and Will'
 __version__ = '1.0'
-from OpenGL.GLUT import *
-from OpenGL.GLU import *
-from OpenGL.GL import *            
-import math
 
-class block():
-    def __init__(self,):
-        '''Initializes a block.'''
-        pass
-        
+class block:
+    def __init__(self,blocktuple=((0,0,0),(0,0,1),(1))):
+        '''Initializes a block. Blocktuple has a position tuple followed by a color tuple.'''
+        self.pos = blockposition(blocktuple[0])
+        self.col = blockcolor(blocktuple[1])
+        self.siz = blocksize(blocktuple[2])
+    def __str__(self):
+        return self.pos,self.col,self.siz
+    def changecolor(self,tup):
+        self.col.color(tup)
+    def changeposition(self,tup):
+        self.pos.position(tup)
+    def changesize(self,tup):
+        self.siz.size(tup)
+
+class blockposition:
+    def __init__(self,postup):
+        '''Initializes the position.'''
+        self.postup=postup
+    def position(self,postup=()):
+        if not postup==():
+            self.postup=postup
+        return postup
+
+class blockcolor:
+    def __init__(self,postup):
+        '''Initializes the color.'''
+        self.postup=postup
+    def color(self,postup=()):
+        if not postup==():
+            self.postup=postup
+        return postup
+
+class blocksize:
+    def __init__(self,postup):
+        '''Initializes the size.'''
+        self.postup=postup
+    def size(self,postup=()):
+        if not postup==():
+            self.postup=postup
+        return postup        
