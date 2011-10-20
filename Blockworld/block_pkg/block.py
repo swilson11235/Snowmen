@@ -47,5 +47,5 @@ class blocksize:
         return self.sizetup
     def size(self,tup=()):
         if not tup==():
-            self.sizeup=tup
+            self.sizetup=tup
         return self.sizetup        
